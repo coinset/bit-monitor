@@ -8,16 +8,16 @@ type DefaultLayout = {
 const Default = ({ children }: DefaultLayout) => {
   return (
     <div className="h-screen">
-      <header className="px-2 py-2 border-b border-gray-400">
+      <header className="px-2 py-2 shadow border-b border-gray-200">
         <Link className="text-2xl" href="/">
           Bit Monitor
         </Link>
       </header>
 
       <div className="md:grid md:grid-cols-[240px,1fr]">
-        <LeftDrawer className="hidden md:block h-screen bg-gray-100" />
+        <LeftDrawer className="hidden md:block h-screen shadow bg-gray-100" />
 
-        <main className="p-8">{children}</main>
+        <main className="p-2 md:p-8">{children}</main>
       </div>
     </div>
   )
