@@ -6,14 +6,7 @@ type TradeData = { date: Date; side: Side; price: number; amount: number }
 
 type Side = 'buy' | 'sell'
 
-const parse = ([price, amount]: [string, string], side: Side): TradeData => {
-  return {
-    price: Number(price),
-    amount: Number(amount),
-    side,
-    date: new Date()
-  }
-}
+import TradeHistory from '@/components/trade_history/trade_history'
 
 const Index = () => {
   const [data, setData] = useState<TradeData[]>([])
@@ -57,24 +50,8 @@ const Index = () => {
 
       <div>
         <h2>Trade History</h2>
-        <div className="table">
-          {data.map(({ date, price, amount, side }, i) => {
-            return (
-              <div
-                className="overflow-hidden text-xs space-x-2 font-medium"
-                key={i}
-              >
-                <span>{date.toLocaleTimeString()}</span>
-                <span
-                  className={side === 'buy' ? 'text-green-500' : 'text-red-500'}
-                >
-                  {price.toFixed()}
-                </span>
-                <span>{amount.toFixed(8)}</span>
-              </div>
-            )
-          })}
-        </div>
+
+        <TradeHistory data={data} />
       </div>
     </main>
   )

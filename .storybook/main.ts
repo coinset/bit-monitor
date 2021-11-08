@@ -1,6 +1,7 @@
 import { join } from 'path'
 import preact from '@preact/preset-vite'
 import type { StorybookConfig } from '@storybook/core-common'
+import Unocss from 'unocss/vite'
 
 const toPath = (path: string): string => join(process.cwd(), path)
 
@@ -12,7 +13,7 @@ const config: StorybookConfig = {
     builder: 'storybook-builder-vite'
   },
   viteFinal: async (config) => {
-    config.plugins = [...config.plugins, preact()]
+    config.plugins = [...config.plugins, preact(), Unocss({})]
     config.resolve.dedupe = ['@storybook/client-api']
     return {
       ...config,
