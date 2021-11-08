@@ -55,14 +55,14 @@ const Index = (): JSX.Element => {
     })
   }, [])
   return (
-    <>
+    <main>
       <div>BTCJPY</div>
       <HighchartsReact
         constructorType="stockChart"
         highcharts={Highcharts}
         options={options}
       />
-    </>
+    </main>
   )
 }
 

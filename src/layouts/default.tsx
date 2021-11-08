@@ -17,7 +17,7 @@ const Default = ({ children }: DefaultLayout) => {
       <div className="md:grid md:grid-cols-[240px,1fr]">
         <LeftDrawer className="hidden md:block h-screen shadow bg-gray-100" />
 
-        <main className="p-2 md:p-8">{children}</main>
+        {children}
       </div>
     </div>
   )

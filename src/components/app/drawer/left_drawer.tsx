@@ -7,9 +7,17 @@ type LeftDrawerProps = {
 
 const LeftDrawer = ({ className }: LeftDrawerProps) => {
   return (
-    <nav className={clsx(className, 'p-2')}>
-      <h2 className="text-gray-400">Market</h2>
-      <Link href="/coincheck">coincheck</Link>
+    <nav className={clsx(className)}>
+      <h2 className="text-gray-400 p-1 text-xs pl-4">MARKET</h2>
+      <div>
+        <Link
+          activeClassName="bg-purple-300"
+          className="block p-2 hover:bg-purple-200 transition-colors duration-300"
+          href="/coincheck"
+        >
+          Coincheck
+        </Link>
+      </div>
     </nav>
   )
 }
