@@ -13,10 +13,7 @@ const TradeHistory = ({ className, data }: TradeHistoryProps): JSX.Element => {
     <div className={className}>
       {data.map(({ date, price, amount, side }, i) => {
         return (
-          <div
-            className="overflow-hidden text-xs space-x-2 font-medium"
-            key={i}
-          >
+          <div className="text-xs space-x-2 font-medium" key={i}>
             <span>{date.toLocaleTimeString()}</span>
             <span
               className={side === 'buy' ? 'text-green-500' : 'text-red-500'}

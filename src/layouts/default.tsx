@@ -26,7 +26,7 @@ const Default = ({ children }: DefaultLayout) => {
 
         <div
           class={clsx(
-            'mt-[54px] transition duration-300',
+            'mt-[54px] h-full transition duration-300',
             state ? 'md:ml-12' : 'md:ml-300px'
           )}
         >

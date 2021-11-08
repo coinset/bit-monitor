@@ -1,9 +1,11 @@
+import HighchartsReact from 'highcharts-react-official'
+import Highcharts from 'highcharts/highstock'
 import { useEffect, useMemo, useState } from 'preact/hooks'
+
 import { client } from '@/lib/influx_db/client'
 import { org } from '@/lib/influx_db/constants'
-import Highcharts from 'highcharts/highstock'
+
 import type { Options } from 'highcharts/highstock'
-import HighchartsReact from 'highcharts-react-official'
 
 const query = `from(bucket: "crypto_currency") |> range(start: -24h)
 |> filter(fn: (r) => r["_measurement"] == "bitbank" or r["_measurement"] == "bitflyer" or r["_measurement"] == "btcbox" or r["_measurement"] == "coincheck" or r["_measurement"] == "decurret" or r["_measurement"] == "gmocoin" or r["_measurement"] == "huobi" or r["_measurement"] == "liquid" or r["_measurement"] == "zaif")
