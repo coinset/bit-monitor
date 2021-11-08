@@ -1,7 +1,6 @@
 import preact from '@preact/preset-vite'
 import Unocss from 'unocss/vite'
 import { defineConfig } from 'vite'
-
 import { resolve } from 'path'
 
 export default defineConfig({
@@ -10,5 +9,233 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
-  plugins: [preact(), Unocss({})]
+  plugins: [preact(), Unocss({}), svgrComponent({})]
 })
+
+import svgr from '@svgr/core'
+import { transform } from 'esbuild'
+
+import fs from 'fs'
+
+import type { Loader } from 'esbuild'
+import type { PluginOption, TransformResult } from 'vite'
+
+export type TemplateOptions = SvgrOpts
+
+export interface TemplateData {
+  imports?: string[]
+  interfaces?: string[]
+  componentName?: string
+  props?: string[]
+  jsx?: string
+  exports?: string[]
+}
+
+export type TemplateFunc = (
+  templateOptions: { template: unknown },
+  opts: TemplateOptions,
+  data: TemplateData
+) => string
+
+export interface SvgrOpts {
+  /** Specify a custom config file. */
+  configFile?: string
+  /** Replace SVG width and height with 1em to make SVG inherit text size. */
+  icon?: boolean
+  /** Custom extension for generated files (default "js"). */
+  ext?: string
+  /** Modify all SVG nodes with uppercase and use react-native-svg template. */
+  native?: boolean | { expo: boolean }
+  /** Generate .tsx files with TypeScript bindings. */
+  typescript?: boolean
+  /** Keep width and height attributes from the root SVG tag. */
+  dimensions?: boolean
+  /** Forward all properties on the React component to the SVG tag. */
+  expandProps?: 'start' | 'end' | false
+  /** Use Prettier to format JavaScript code output. */
+  prettier?: boolean
+  /** Specify prettier config. */
+  prettierConfig?: Record<string, unknown>
+  /** Use SVGO to optimize SVG code before transforming into a React component. Default: true. */
+  svgo?: boolean
+  /** Specify SVGO config. https://gist.github.com/pladaria/69321af86ce165c2c1fc1c718b098dd0 */
+  svgoConfig?: Record<string, unknown>
+  /** Forward the ref to the root SVG tag if true. */
+  ref?: boolean
+  /** Wrap the exported component in React.memo if true. */
+  memo?: boolean
+  /**
+   * Replace an attribute value by another. Intended for changing an Icon
+   * color to currentColor to inherit from text color.
+   *
+   * Specify dynamic property using curly braces: { '#000': "{props.color}" }
+   */
+  replaceAttrValues?: Record<string, string>
+  /**
+   * Add props to the SVG tag.
+   *
+   * Specify dynamic property using curly braces: { focusable: "{true}" }.
+   * Particularly useful with a custom template.
+   */
+  svgProps?: Record<string, string>
+  /**
+   * Add title tag via title property. If titleProp is set to true and no
+   * title is provided (title={undefined}) at render time, this will fallback
+   * to an existing title element in the svg if it exists.
+   */
+  titleProp?: boolean
+  /**
+   * Specify a template file (CLI) or a template function (API) to use.
+   * For an example of template, see the default one.
+   * https://github.com/gregberge/svgr/blob/main/packages/babel-plugin-transform-svg-component/src/index.js
+   */
+  template?: TemplateFunc
+  /** Output files into a directory. */
+  outDir?: string
+  /**
+   * Specify a template function (API) to change default index.js output
+   * (when --out-dir is used).
+   *
+   * https://github.com/gregberge/svgr/blob/main/packages/cli/src/dirCommand.js#L39
+   */
+  indexTemplate?: (filePaths: string[]) => string
+  /** When used with --out-dir, it ignores already existing files. */
+  ignoreExisting?: boolean
+  /**
+   * Specify a custom filename case. Possible values: pascal for PascalCase,
+   * kebab for kebab-case or camel for camelCase.
+   */
+  filenameCase?: 'kebab' | 'camel' | 'pascal'
+  /**
+   * By default @svgr/core doesn't include svgo and prettier plugins,
+   * if you want them, you have to install them and include them in config.
+   */
+  plugins?: string[]
+}
+
+export interface SvgrPluginOptions {
+  /**
+   * Pattern to be used in order to transform or not the file.
+   *  - Micromatch (npm package) string pattern
+   */
+  importStringPattern: string | ReadonlyArray<string>
+
+  /**
+   * SVGR package options
+   */
+  svgrOptions: SvgrOpts
+
+  /**
+   * Generates component as a typescript component and
+   * transform it with typescript loader by esbuild
+   */
+  typescript: boolean
+
+  /**
+   * This only work if the file is exported by vite
+   * due to /public or configured files pattern to be exported
+   */
+  keepEmittedAssets: boolean
+}
+
+/** Default optimized configuration */
+const DEFAULT_SVGR_OPTIONS: SvgrOpts = {
+  memo: true,
+  typescript: true,
+  svgo: true,
+  titleProp: true
+}
+
+/**
+ * ===========================  MAIN PLUGIN FUNCTION  =============================================
+ */
+export function svgrComponent({
+  importStringPattern = '*.svg*',
+  svgrOptions = DEFAULT_SVGR_OPTIONS,
+  typescript = true,
+  keepEmittedAssets = false
+}: Partial<SvgrPluginOptions>): PluginOption {
+  const transformedSvgsCache = new Map<string, TransformResult>()
+
+  const transformLoader = typescript ? 'tsx' : ('jsx' as Loader)
+
+  return {
+    // Ensure process the svg before vite auto process it as a data URI
+    enforce: 'pre',
+    name: 'vite:svgr-component',
+
+    async transform(_, svgImportString) {
+      /** -------------------- Guards ------------------------------------------------- */
+      const isValidSvg = svgImportString.includes('.svg')
+      if (!isValidSvg) return null
+
+      const transformedSvg = transformedSvgsCache.get(svgImportString)
+      const isAlreadyTransformed = typeof transformedSvg !== 'undefined'
+
+      if (isAlreadyTransformed) return transformedSvg
+      /** ------------------ [end] Guards -------------------------------------------- */
+
+      const svgrComponentOptions = {
+        ...DEFAULT_SVGR_OPTIONS,
+        ...(svgrOptions || {})
+      }
+
+      const code = await compileSvg({
+        svgImportString,
+        svgrComponentOptions,
+        transformLoader
+      })
+
+      transformedSvgsCache.set(svgImportString, code)
+      return code
+    },
+
+    generateBundle(_config, bundle) {
+      if (keepEmittedAssets) {
+        return
+      }
+
+      // Discard transformed SVG assets from bundle so they are not emitted
+      for (const [key, bundleEntry] of Object.entries(bundle)) {
+        const { type, name } = bundleEntry
+        const isSvgTransformed =
+          type === 'asset' &&
+          name &&
+          name.endsWith('.svg') &&
+          transformedSvgsCache.has(name)
+        if (isSvgTransformed) {
+          delete bundle[key]
+        }
+      }
+    }
+  }
+}
+/** ============================================================================================ */
+
+interface CompileSvg {
+  svgImportString: string
+  svgrComponentOptions: SvgrOpts
+  transformLoader: Loader
+}
+
+/**
+ * @description Compiles the SVG to a React component
+ * @param {object}
+ *  - svgImportString:      SVG file import string to be used to read the file
+ *  - svgrComponentOptions: SVGR lib options to be passed to the lib compiler
+ *  - transformLoader:      Loader to be used in esbuild transform method
+ *
+ * @returns Esbuild transformation result object
+ */
+async function compileSvg({
+  svgImportString,
+  svgrComponentOptions,
+  transformLoader
+}: CompileSvg) {
+  const svgFileContent = await fs.promises.readFile(svgImportString, 'utf8')
+
+  const componentCode = await svgr(svgFileContent, svgrComponentOptions)
+  const { code } = await transform(componentCode, { loader: transformLoader })
+
+  return { code, map: null } as TransformResult
+}

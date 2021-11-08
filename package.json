@@ -16,7 +16,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@coinset/coincheck": "^1.0.0-beta.4",
+    "@coinset/coincheck": "^1.0.0-beta.6",
     "@influxdata/influxdb-client-browser": "^1.20.0",
     "clsx": "^1.1.1",
     "highcharts": "^9.3.1",
@@ -49,9 +49,12 @@
     "commitlint-config-gitmoji": "^2.2.5",
     "cryptocurrency-icons": "^0.18.0",
     "cz-emoji": "^1.3.1",
-    "eslint": "^8.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-preact": "^1.2.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^7.0.4",
     "jest": "^27.3.1",
@@ -63,6 +66,7 @@
     "typescript": "^4.3.2",
     "unocss": "^0.6.4",
     "vite": "^2.6.4",
+    "vite-plugin-svgr-component": "^0.9.0",
     "yaml-lint": "^1.2.4"
   },
   "lint-staged": {
