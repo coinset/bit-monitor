@@ -1,7 +1,8 @@
 import { render } from 'preact'
 
 import App from '@/app'
-// import 'uno.css'
-// import '@unocss/reset/tailwind.css'
+// eslint-disable-next-line import/no-unresolved
+import 'uno.css'
+import '@unocss/reset/tailwind.css'
 
 render(<App />, document.getElementById('app')!)

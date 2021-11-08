@@ -1,5 +1,6 @@
 import AsyncRoute from 'preact-async-route'
-import Router from 'preact-router'
+import { Router } from 'preact-router'
+
 import DefaultLayout from '@/layouts/default'
 
 const App = (): JSX.Element => {

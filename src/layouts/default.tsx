@@ -1,26 +1,39 @@
 import { Link } from 'preact-router'
+import { useBoolean } from 'react-hookable'
+import clsx from 'clsx'
 
-import LeftDrawer from '@/components/app/drawer/left_drawer'
+import LeftDrawer from '@/components/app/drawer'
+import { ContextIsMinify } from '@/layouts/contexts'
+
+import type { ComponentChildren } from 'preact'
 
 type DefaultLayout = {
-  children: JSX.Element | JSX.Element[]
+  children: ComponentChildren
 }
 
 const Default = ({ children }: DefaultLayout) => {
+  const [state, updater] = useBoolean()
   return (
-    <div className="h-screen">
-      <header className="px-2 py-2 shadow border-b border-gray-200">
-        <Link className="text-2xl" href="/">
-          Bit Monitor
-        </Link>
-      </header>
+    <ContextIsMinify.Provider value={[state, updater]}>
+      <div class="relative">
+        <header class="fixed flex items-center border-b border-gray-200 bg-white inset-x-0 p-2 top-0 h-[54px]">
+          <Link className="text-2xl" href="/">
+            Bit Monitor
+          </Link>
+        </header>
 
-      <div className="md:grid md:grid-cols-[240px,1fr]">
-        <LeftDrawer className="hidden md:block h-screen shadow bg-gray-100" />
+        <LeftDrawer className={clsx(state ? 'md:w-12' : 'md:w-300px')} />
 
-        {children}
+        <div
+          class={clsx(
+            'mt-[54px] transition duration-300',
+            state ? 'md:ml-12' : 'md:ml-300px'
+          )}
+        >
+          {children}
+        </div>
       </div>
-    </div>
+    </ContextIsMinify.Provider>
   )
 }
 
