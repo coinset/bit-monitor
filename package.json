@@ -19,12 +19,14 @@
     "@coinset/coincheck": "^1.0.0-beta.6",
     "@influxdata/influxdb-client-browser": "^1.20.0",
     "clsx": "^1.1.1",
+    "echarts": "^5.2.2",
+    "echarts-for-react": "^3.0.2",
     "highcharts": "^9.3.1",
     "highcharts-react-official": "^3.1.0",
     "preact": "^10.5.13",
     "preact-async-route": "^2.2.1",
     "preact-router": "^3.2.1",
-    "react-hookable": "^1.0.0-beta.59"
+    "react-hookable": "^1.0.0-beta.60"
   },
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",

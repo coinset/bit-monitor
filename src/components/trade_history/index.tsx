@@ -1,14 +1,13 @@
-import type { FunctionComponent } from 'preact'
-import TradeHistory from '@/components/trade_history/trade_history'
 import { WS_URL, parseTrade } from '@coinset/coincheck'
-import { useState } from 'preact/hooks'
-import { useWebSocket } from '@/hooks/useWebSocket'
+import { useContext } from 'preact/hooks'
+import { useWebSocket } from 'react-hookable'
 
-type TradeData = { date: Date; side: Side; price: number; amount: number }
-type Side = 'buy' | 'sell'
+import TradeHistory from '@/components/trade_history/trade_history'
+import { ContextTradeHistory } from '@/pages/coincheck/contexts'
+import type { FunctionComponent } from 'preact'
 
 const Index: FunctionComponent = () => {
-  const [data, setData] = useState<TradeData[]>([])
+  const [data, setData] = useContext(ContextTradeHistory)
 
   useWebSocket<string>(
     {
@@ -18,7 +17,7 @@ const Index: FunctionComponent = () => {
         const [, , price, amount, side] = parseTrade(data)
 
         setData((state) => {
-          const taked = state.splice(0, 100)
+          const taked = state.splice(0, 1000)
           return [
             {
               price,

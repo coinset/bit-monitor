@@ -26,6 +26,8 @@ specifiers:
   commitlint-config-gitmoji: ^2.2.5
   cryptocurrency-icons: ^0.18.0
   cz-emoji: ^1.3.1
+  echarts: ^5.2.2
+  echarts-for-react: ^3.0.2
   eslint: ^7.32.0
   eslint-config-preact: ^1.2.0
   eslint-import-resolver-alias: ^1.1.2
@@ -43,7 +45,7 @@ specifiers:
   preact-async-route: ^2.2.1
   preact-router: ^3.2.1
   prettier: ^2.4.1
-  react-hookable: ^1.0.0-beta.59
+  react-hookable: ^1.0.0-beta.60
   storybook-builder-vite: ^0.1.5
   tsc-files: ^1.1.2
   typescript: ^4.3.2
@@ -56,12 +58,14 @@ dependencies:
   '@coinset/coincheck': 1.0.0-beta.6
   '@influxdata/influxdb-client-browser': 1.20.0
   clsx: 1.1.1
+  echarts: 5.2.2
+  echarts-for-react: 3.0.2_echarts@5.2.2
   highcharts: 9.3.1
   highcharts-react-official: 3.1.0_highcharts@9.3.1
   preact: 10.5.15
   preact-async-route: 2.2.1
   preact-router: 3.2.1_preact@10.5.15
-  react-hookable: 1.0.0-beta.59
+  react-hookable: 1.0.0-beta.60
 
 devDependencies:
   '@commitlint/cli': 14.1.0
@@ -7957,6 +7961,24 @@ packages:
       stream-shift: 1.0.1
     dev: true
 
+  /echarts-for-react/3.0.2_echarts@5.2.2:
+    resolution: {integrity: sha512-DRwIiTzx8JfwPOVgGttDytBqdp5VzCSyMRIxubgU/g2n9y3VLUmF2FK7Icmg/sNVkv4+rktmrLN9w22U2yy3fA==}
+    peerDependencies:
+      echarts: ^3.0.0 || ^4.0.0 || ^5.0.0
+      react: ^15.0.0 || >=16.0.0
+    dependencies:
+      echarts: 5.2.2
+      fast-deep-equal: 3.1.3
+      size-sensor: 1.0.1
+    dev: false
+
+  /echarts/5.2.2:
+    resolution: {integrity: sha512-yxuBfeIH5c+0FsoRP60w4De6omXhA06c7eUYBsC1ykB6Ys2yK5fSteIYWvkJ4xJVLQgCvAdO8C4mN6MLeJpBaw==}
+    dependencies:
+      tslib: 2.3.0
+      zrender: 5.2.1
+    dev: false
+
   /ee-first/1.1.1:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: true
@@ -8956,7 +8978,6 @@ packages:
 
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
 
   /fast-glob/2.2.7:
     resolution: {integrity: sha512-g1KuQwHOZAmOZMuBtHdxDtju+T2RT8jgCC9aANsbpdiDDTSnjgfuVsIBNKbUeJI3oKMRExcfNDtJl4OhbffMsw==}
@@ -13431,8 +13452,8 @@ packages:
       shallowequal: 1.1.0
     dev: true
 
-  /react-hookable/1.0.0-beta.59:
-    resolution: {integrity: sha512-K77cH/sggaCutsF8NF+3+AXp2/LBiM4SawW3/mjQUt3MzJDbmlHIN3qxzMUENqfx1tYybloed/z7xB969bgKeQ==}
+  /react-hookable/1.0.0-beta.60:
+    resolution: {integrity: sha512-Gl1WveisTBbdHw4TAvVXgydzmGBO3+8fUX0lGyxWwge4EFavaajTUycDqdLxZBJ+caPYsZ6qce75t+kdsDsSgw==}
     peerDependencies:
       react: ^16.8.0
       react-dom: ^16.8.0
@@ -14269,6 +14290,10 @@ packages:
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
     dev: true
+
+  /size-sensor/1.0.1:
+    resolution: {integrity: sha512-QTy7MnuugCFXIedXRpUSk9gUnyNiaxIdxGfUjr8xxXOqIB3QvBUYP9+b51oCg2C4dnhaeNk/h57TxjbvoJrJUA==}
+    dev: false
 
   /slash/2.0.0:
     resolution: {integrity: sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==}
@@ -15141,6 +15166,10 @@ packages:
   /tslib/2.1.0:
     resolution: {integrity: sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==}
     dev: true
+
+  /tslib/2.3.0:
+    resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
+    dev: false
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
@@ -16067,6 +16096,12 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zrender/5.2.1:
+    resolution: {integrity: sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw==}
+    dependencies:
+      tslib: 2.3.0
+    dev: false
 
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
